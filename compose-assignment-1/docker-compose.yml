@@ -23,7 +23,7 @@ services:
 
 volumes:
   drupal-modules:
-  drupall-profiles:
+  drupal-profiles:
   drupal-themes:
   drupal-sites:
   pg-data:
