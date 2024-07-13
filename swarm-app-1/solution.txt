@@ -1,0 +1,20 @@
+#create networks
+docker network create --driver overlay frontend
+docker network create --driver overlay backend
+
+#create services
+#service vote
+docker service create --replicas 3 --name vote --network frontend -p 80:80 bretfisher/examplevotingapp_vote
+
+#service redis
+docker service create --name redis --network frontend redis:3.2
+
+#service worker
+docker service create --name worker --network frontend --network backend bretfisher/examplevotingapp_worker
+
+#service db
+docker service create --name db --network backend -e POSTGRES_HOST_AUTH_METHOD=trust \
+--mount type=volume,source=db-data,target=/var/lib/postgresql/data postgres:9.4
+
+#service result
+docker service create --name result --network backend -p 5001:80 bretfisher/examplevotingapp_result
